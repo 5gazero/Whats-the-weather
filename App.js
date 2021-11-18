@@ -1,19 +1,62 @@
+import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function App() {
+  const [city, setCity] = useState("Loading...")
+  const [location, setLocation] = useState();
+  const [ok, setOk] = useState(true);
+
+  const ask = async () => {
+    const { granted } = await Location.requestForegroundPermissionsAsync(); // 앱을 사용하는 동안 위치정보 허용 여부
+    // 허용하지 않았을 시
+    if (!granted) {
+      setOk(false);
+    }
+    const {
+      coords: { latitude, longitude },
+    } = await Location.getCurrentPositionAsync({ accuracy: 5 });
+    const location = await Location.reverseGeocodeAsync(
+      {
+        latitude,
+        longitude,
+      },
+      { useGoogleMaps: false },
+    );
+    setCity(location[0].city)
+  };
+
+  useEffect(() => {
+    ask();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Seoul</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
-      <View style={styles.weather}>
+      <ScrollView
+        pagingEnabled
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.weather}
+      >
         <View style={styles.day}>
           <Text style={styles.temp}>16</Text>
           <Text style={styles.description}>Sunny</Text>
         </View>
-      </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>16</Text>
+          <Text style={styles.description}>Sunny</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>16</Text>
+          <Text style={styles.description}>Sunny</Text>
+        </View>
+      </ScrollView>
       <StatusBar style='light' />
     </View>
   );
@@ -35,22 +78,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   weather: {
-    flex: 4,
     backgroundColor: "#8774F7",
   },
   day: {
-    flex: 1,
+    width: SCREEN_WIDTH,
     alignItems: "center",
   },
   temp: {
     marginTop: 180,
     fontSize: 140,
     fontWeight: "600",
-    color: "#fefefe"
+    color: "#fefefe",
   },
   description: {
     fontSize: 30,
     fontWeight: "600",
-    color: "#fefefe"
-  }
+    color: "#fefefe",
+  },
 });
