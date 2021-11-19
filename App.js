@@ -8,10 +8,22 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  SafeAreaView
 } from "react-native";
+import { Fontisto } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const API_KEY = "de6256127a0797eb709e91273c5a5d1a";
+
+const icons = {
+  Clouds: "cloudy",
+  Clear: "day-sunny",
+  Atomosphere: "cloudy-gusts",
+  Snow: "snow",
+  Rain: "rains",
+  Drizzle: "rain",
+  Thunderstorm: "lightning",
+};
 
 export default function App() {
   const [city, setCity] = useState("Loading...");
@@ -61,6 +73,13 @@ export default function App() {
         ) : (
           days.map((day, index) => (
             <View key={index} style={styles.day}>
+                <Text style={styles.icon}>
+                  <Fontisto
+                    name={icons[day.weather[0].main]}
+                    size={230}
+                    color='white'
+                  />
+                </Text>
               <Text style={styles.temp}>
                 {parseFloat(day.temp.day).toFixed(1)}
               </Text>
@@ -95,14 +114,21 @@ const styles = StyleSheet.create({
   day: {
     width: SCREEN_WIDTH,
     alignItems: "center",
+    // backgroundColor: "darkgrey",
+  },
+  icon: {
+    // flex: 2,
+    // backgroundColor: "#8774F7",
   },
   temp: {
-    marginTop: 180,
-    fontSize: 140,
+    // flex: 1,
+    // marginTop: 20,
+    fontSize: 100,
     fontWeight: "600",
     color: "#fefefe",
   },
   description: {
+    flex: 1,
     fontSize: 30,
     fontWeight: "600",
     color: "#fefefe",
