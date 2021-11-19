@@ -8,7 +8,8 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  SafeAreaView
+  SafeAreaView,
+  Image,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 
@@ -23,6 +24,16 @@ const icons = {
   Rain: "rains",
   Drizzle: "rain",
   Thunderstorm: "lightning",
+};
+
+const today = new Date();
+const time = {
+  year: today.getFullYear(), //현재 년도
+  month: today.getMonth() + 1, // 현재 월
+  day: today.getDay(), // 현재 요일
+  date: today.getDate(), // 현재 날짜
+  hours: today.getHours(), //현재 시간
+  minutes: today.getMinutes(), //현재 분
 };
 
 export default function App() {
@@ -73,17 +84,22 @@ export default function App() {
         ) : (
           days.map((day, index) => (
             <View key={index} style={styles.day}>
-                <Text style={styles.icon}>
-                  <Fontisto
-                    name={icons[day.weather[0].main]}
-                    size={230}
-                    color='white'
-                  />
-                </Text>
+              {/* <Text style={styles.icon}> */}
+              {/* <Fontisto
+                  name={icons[day.weather[0].main]}
+                  size={230}
+                  color='white'
+                /> */}
+              {/* </Text> */}
+              <Image
+                style={styles.icon}
+                source={require("./assets/icon/Rainy.png")}
+              />
               <Text style={styles.temp}>
-                {parseFloat(day.temp.day).toFixed(1)}
+                {parseFloat(day.temp.day).toFixed(1) + "º"}
               </Text>
               <Text style={styles.description}>{day.weather[0].main}</Text>
+              <Text style={styles.date}>{time.month}월 {time.date}일</Text>
             </View>
           ))
         )}
@@ -99,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0921",
   },
   city: {
-    flex: 1,
+    flex: 5,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -117,20 +133,24 @@ const styles = StyleSheet.create({
     // backgroundColor: "darkgrey",
   },
   icon: {
-    // flex: 2,
     // backgroundColor: "#8774F7",
+    width: "80%",
+    height: "50%",
+    resizeMode: "contain",
   },
   temp: {
-    // flex: 1,
     // marginTop: 20,
     fontSize: 100,
     fontWeight: "600",
     color: "#fefefe",
   },
   description: {
-    flex: 1,
     fontSize: 30,
     fontWeight: "600",
+    color: "#fefefe",
+  },
+  date: {
+    fontSize: 20,
     color: "#fefefe",
   },
 });
