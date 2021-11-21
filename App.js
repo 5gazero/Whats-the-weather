@@ -17,13 +17,13 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const API_KEY = "de6256127a0797eb709e91273c5a5d1a";
 
 const icons = {
-  Clouds: "cloudy",
-  Clear: "day-sunny",
-  Atomosphere: "cloudy-gusts",
-  Snow: "snow",
-  Rain: "rains",
-  Drizzle: "rain",
-  Thunderstorm: "lightning",
+  Clouds: require("./assets/icon/Cloudy.png"),
+  Clear: require("./assets/icon/Sun.png"),
+  Atomosphere: require("./assets/icon/Partly-Cloudy.png"),
+  Snow: require("./assets/icon/Snow.png"),
+  Rain: require("./assets/icon/Rainy.png"),
+  Drizzle: require("./assets/icon/Partly-Drizzling.png"),
+  Thunderstorm: require("./assets/icon/Thunderstorm.png"),
 };
 
 const today = new Date();
@@ -93,7 +93,7 @@ export default function App() {
               {/* </Text> */}
               <Image
                 style={styles.icon}
-                source={require("./assets/icon/Rainy.png")}
+                source={icons[day.weather[0].main]}
               />
               <Text style={styles.temp}>
                 {parseFloat(day.temp.day).toFixed(1) + "º"}
