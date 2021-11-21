@@ -8,10 +8,8 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  SafeAreaView,
   Image,
 } from "react-native";
-import { Fontisto } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const API_KEY = "de6256127a0797eb709e91273c5a5d1a";
@@ -28,12 +26,36 @@ const icons = {
 
 const today = new Date();
 const time = {
-  year: today.getFullYear(), //현재 년도
+  year: today.getFullYear(), // 현재 년도
   month: today.getMonth() + 1, // 현재 월
   day: today.getDay(), // 현재 요일
   date: today.getDate(), // 현재 날짜
-  hours: today.getHours(), //현재 시간
+  hours: today.getHours(), // 현재 시간
   minutes: today.getMinutes(), //현재 분
+};
+const Day = (time) => {
+  if (time.day === 0) return "Sunday";
+  if (time.day === 1) return "Monday";
+  if (time.day === 2) return "Tuesday";
+  if (time.day === 3) return "Wednesday";
+  if (time.day === 4) return "Thursday";
+  if (time.day === 5) return "Friday";
+  if (time.day === 6) return "Saturday";
+};
+const Month = (time) => {
+  const month = time.month;
+  if (month === 1) return "Jan";
+  if (month === 2) return "Feb";
+  if (month === 3) return "Mar";
+  if (month === 4) return "Apr";
+  if (month === 5) return "May";
+  if (month === 6) return "Jun";
+  if (month === 7) return "Jul";
+  if (month === 8) return "Aug";
+  if (month === 9) return "Sep";
+  if (month === 10) return "Oct";
+  if (month === 11) return "Nov";
+  if (month === 12) return "Dec";
 };
 
 export default function App() {
@@ -84,22 +106,14 @@ export default function App() {
         ) : (
           days.map((day, index) => (
             <View key={index} style={styles.day}>
-              {/* <Text style={styles.icon}> */}
-              {/* <Fontisto
-                  name={icons[day.weather[0].main]}
-                  size={230}
-                  color='white'
-                /> */}
-              {/* </Text> */}
-              <Image
-                style={styles.icon}
-                source={icons[day.weather[0].main]}
-              />
+              <Image style={styles.icon} source={icons[day.weather[0].main]} />
               <Text style={styles.temp}>
                 {parseFloat(day.temp.day).toFixed(1) + "º"}
               </Text>
               <Text style={styles.description}>{day.weather[0].main}</Text>
-              <Text style={styles.date}>{time.month}월 {time.date}일</Text>
+              <Text style={styles.date}>
+                {Day(time)}, {time.date} {Month(time)}
+              </Text>
             </View>
           ))
         )}
