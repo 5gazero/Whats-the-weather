@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Image,
 } from "react-native";
+import * as Font from "expo-font";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const API_KEY = "de6256127a0797eb709e91273c5a5d1a";
@@ -62,6 +63,7 @@ export default function App() {
   const [city, setCity] = useState("Loading...");
   const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   const getWeather = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync(); // 앱을 사용하는 동안 위치정보 허용 여부
@@ -81,8 +83,17 @@ export default function App() {
       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`,
     );
     const json = await response.json();
+    // console.log(json);
     setDays(json.daily);
   };
+
+  useEffect(async () => {
+    await Font.loadAsync({
+      fredoka: require("./assets/fonts/FredokaOne-Regular.ttf"),
+      cafe24ssurround: require("./assets/fonts/Cafe24Ssurround.ttf"),
+    });
+    setIsReady(true);
+  }, []);
 
   useEffect(() => {
     getWeather();
@@ -90,9 +101,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.city}>
-        <Text style={styles.cityName}>{city}</Text>
-      </View>
+      {isReady && (
+        <View style={styles.city}>
+          <Text style={styles.cityName}>{city}</Text>
+        </View>
+      )}
       <ScrollView
         pagingEnabled
         horizontal
@@ -108,7 +121,7 @@ export default function App() {
             <View key={index} style={styles.day}>
               <Image style={styles.icon} source={icons[day.weather[0].main]} />
               <Text style={styles.temp}>
-                {parseFloat(day.temp.day).toFixed(1) + "º"}
+                {parseFloat(day.temp.day).toFixed(1) + "°"}
               </Text>
               <Text style={styles.description}>{day.weather[0].main}</Text>
               <Text style={styles.date}>
@@ -129,11 +142,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0921",
   },
   city: {
+    fontFamily: "fredoka",
     flex: 5,
     justifyContent: "center",
     alignItems: "center",
   },
   cityName: {
+    fontFamily: "cafe24ssurround",
     color: "#fefefe",
     fontSize: 50,
     fontWeight: "600",
@@ -154,16 +169,19 @@ const styles = StyleSheet.create({
   },
   temp: {
     // marginTop: 20,
+    fontFamily: "fredoka",
     fontSize: 100,
     fontWeight: "600",
     color: "#fefefe",
   },
   description: {
+    fontFamily: "fredoka",
     fontSize: 30,
     fontWeight: "600",
     color: "#fefefe",
   },
   date: {
+    fontFamily: "fredoka",
     fontSize: 20,
     color: "#fefefe",
   },
